@@ -25,6 +25,6 @@
   "action": {
     "default_icon": "images/icon12.png",  
     "default_title": "AutoClose",
-    "default_popup": "alert.html"
+    "default_popup": "options.html"
   }
 }
