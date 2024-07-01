@@ -13,8 +13,6 @@ chrome.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
             title: "Your Extension Name",
             message: "Chrome will be closing in 5 seconds due to inactivity",
             buttons: [{ title: "Dismiss" }]
-        }, notificationId => {
-            console.log("Notification created:", notificationId);
         });
     }
 });
