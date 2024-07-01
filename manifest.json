@@ -1,13 +1,15 @@
 {
   "manifest_version": 3,
   "name": "AutoClose",
-  "description": "Closes all Chrome tabs when inactivity detected :D",
+  "description": "Closes all Chrome tabs when inactivity detected",
   "version": "1.0.0",
   "background": {
     "service_worker": "background.js"
   },
   "permissions": [
-    "tabs"
+    "tabs",
+    "storage",
+    "notifications"
   ],
   "content_scripts": [
     {

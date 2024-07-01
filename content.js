@@ -1,25 +1,26 @@
 // Initialize variables
 let inactiveTimer;
 let warningTimer;
+let inactiveDuration = 600 * 1000; //in seconds (10 Minutes for closing)
 
-// Function to prompt the user
+
+// Function to close all tabs
 const closeTabs = () => {
   chrome.runtime.sendMessage({ action: "closeTabs" });
 };
 
-// Function to change icon to closing
-const changeIcon = () => {
-  chrome.runtime.sendMessage({ action: "changeIcon" });
+// Function to notify user
+const notifyUser = () => {
+  chrome.runtime.sendMessage({ action: "notifyUser" });
 };
 
-// Function to handle activity and reset everything
+// Function to handle activity and notify users
 const resetInactiveTimer = () => {
   clearTimeout(inactiveTimer);
   clearTimeout(warningTimer);
-  chrome.runtime.sendMessage({ action: "resetIcon" });
 
-  warningTimer = setTimeout(changeIcon, 2.5 *  1000) // 2.5 seconds for warning
-  inactiveTimer = setTimeout(closeTabs, 5 *  1000); // 5 seconds for warning
+  warningTimer = setTimeout(notifyUser, inactiveDuration - 5 * 1000) // 5 seconds for warning
+  inactiveTimer = setTimeout(closeTabs, inactiveDuration); 
 };
 
 // Function to handle mouse movement

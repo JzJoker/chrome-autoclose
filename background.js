@@ -1,17 +1,21 @@
-// Listen for messages from content script
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
     if (message.action === "closeTabs") {
         // Close all tabs
         chrome.tabs.query({}, function (tabs) {
-            for (var i = 0; i < tabs.length; i++) {
-            chrome.tabs.remove(tabs[i].id);
-            }
+            tabs.forEach(tab => {
+                chrome.tabs.remove(tab.id);
+            });
         });
-    } else if (message.action === "changeIcon") {
-        // Change the extension icon to closing image
-        chrome.action.setIcon({path: "images/close.png"});
-    } else if (message.action === "resetIcon") {
-        // Change the extension icon to default iamge
-        chrome.action.setIcon({path: "images/icon12.png"})
+    } else if (message.action === "notifyUser") {
+        chrome.notifications.create({
+            type: "basic",
+            iconUrl: "images/icon12.png",
+            title: "Your Extension Name",
+            message: "Chrome will be closing in 5 seconds due to inactivity",
+            buttons: [{ title: "Dismiss" }]
+          }, notificationId => {
+            console.log("Notification created:", notificationId);
+          });
+          
     }
-  });
+});
