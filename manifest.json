@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "AutoClose",
+  "description": "Closes all Chrome tabs when inactivity detected :D",
+  "version": "1.0.0",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "tabs"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "icons": {
+    "16": "images/icon12.png",
+    "48": "images/icon12.png",
+    "128": "images/icon12.png"
+  },
+  "action": {
+    "default_icon": "images/icon12.png",  
+    "default_title": "AutoClose",
+    "default_popup": "alert.html"
+  }
+}
