@@ -122,3 +122,13 @@ input::-webkit-inner-spin-button {
     justify-content: space-between;
     align-items: center;
   }
+  .time-remaining-container{
+    background-color: #F76902;
+    padding: 10px;
+  }
+  .time-remaining-container p{
+    margin: 0;
+    text-align: center;
+    color: white;
+    display: inline;
+  }
