@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+.logo{
+    height: 20px;
+    margin: 0;
+}
+.slider-container {
+    margin-bottom: 20px;
+}
+.sliderRangeContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    padding: 0;
+}
+.number-input {
+    border: 0;
+    width: 30px;
+    text-align: center;
+    font-weight: bold;
+}
+.logo{
+    height: 20px;
+    display: inline;
+    vertical-align: middle;
+}
+.logo-text{
+    display: inline;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+.slider {
+    width: 300px;
+}
+.slider-value{
+    font-weight: bold;
+    margin:0;
+}
+.slider-label{
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 5px;
+}
+.slider-description{
+    color:gray;
+}
