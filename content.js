@@ -1,7 +1,7 @@
-// Initialize variables
+//initialize variables
 let inactiveTimer;
 let warningTimer;
-let inactiveDuration = 600000; // Default inactive duration in milliseconds (10 minutes)
+let inactiveDuration;
 let autoCloseEnabled = true; // Default autoCloseEnabled state
 
 // Function to close all tabs
@@ -16,28 +16,34 @@ const notifyUser = () => {
 
 // Function to handle activity and notify users
 const resetInactiveTimer = () => {
-    clearTimeout(inactiveTimer);
     clearTimeout(warningTimer);
+    clearTimeout(inactiveTimer);
 
-    if (autoCloseEnabled) {
+    if (document.visibilityState === 'visible' && autoCloseEnabled) {
         warningTimer = setTimeout(notifyUser, inactiveDuration * 60 - 5000); // Notify 5 seconds before closing
-        inactiveTimer = setTimeout(closeTabs, inactiveDuration * 60);
+        inactiveTimer = setTimeout(closeTabs, inactiveDuration * 60); // Close tabs after inactiveDuration
     }
 };
 
-// Function to handle mouse movement
-const handleMouseMove = () => {
+// Event listeners for mousemove, click, and keydown events
+window.addEventListener("mousemove", function(){
     resetInactiveTimer();
-};
-
-// Function to handle key presses
-const handleKeyDown = () => {
+});
+window.addEventListener("click", function(){
     resetInactiveTimer();
-};
+});
+window.addEventListener("keydown", function(){
+    resetInactiveTimer();
+});
 
-// Event listeners for mousemove and keydown events
-window.addEventListener("mousemove", handleMouseMove);
-window.addEventListener("keydown", handleKeyDown);
+document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+        resetInactiveTimer();
+    } else {
+        clearTimeout(warningTimer);
+        clearTimeout(inactiveTimer);
+    }
+});
 
 // Initialize settings from storage
 chrome.storage.sync.get({

@@ -37,5 +37,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('autoCloseToggle').addEventListener('change', function() {
         let autoCloseEnabled = this.checked;
         chrome.storage.sync.set({ autoCloseEnabled: autoCloseEnabled });
-    });
+        //refresh page
+        chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
+            chrome.tabs.reload(arrayOfTabs[0].id);
+        });    });
 });

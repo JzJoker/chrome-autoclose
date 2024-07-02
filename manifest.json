@@ -8,6 +8,8 @@
   },
   "permissions": [
     "tabs",
+    "activeTab",
+    "scripting",
     "storage",
     "notifications"
   ],
