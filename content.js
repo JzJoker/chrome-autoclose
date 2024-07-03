@@ -21,39 +21,42 @@ const updateRemainingTime = (remainingSeconds) => {
 };
 
 // Function to handle activity and notify users
-const resetInactiveTimer = () => {
-    clearTimeout(warningTimer);
-    clearTimeout(inactiveTimer);
-    clearInterval(displayTimer);
+const startInactiveTimer = () => {
+    if(!document.getElementById('popup')){
+        clearTimeout(warningTimer);
+        clearTimeout(inactiveTimer);
+        clearInterval(displayTimer);
 
-    if (document.visibilityState === 'visible' && autoCloseEnabled) {
-        let remainingTime = inactiveDuration * 60;
+        if (document.visibilityState === 'visible' && autoCloseEnabled) {
+            let remainingTime = inactiveDuration * 60;
 
-        warningTimer = setTimeout(notifyUser, inactiveDuration * 60 - 5000); // Notify 5 seconds before closing
-        inactiveTimer = setTimeout(closeTabs, inactiveDuration * 60); // Close tabs after inactiveDuration
-        displayTimer = setInterval(()=> {
-            remainingTime -=1000;
-            if(remainingTime >=0) {
-                updateRemainingTime(remainingTime);
-            }
-        }, 1000);
+            warningTimer = setTimeout(notifyUser, inactiveDuration * 60 - 5000); // Notify 5 seconds before closing
+            inactiveTimer = setTimeout(closeTabs, inactiveDuration * 60); // Close tabs after inactiveDuration
+            displayTimer = setInterval(()=> {
+                remainingTime -=1000;
+                if(remainingTime >=0) {
+                    updateRemainingTime(remainingTime);
+                }
+            }, 1000);
+        }
     }
+    
 };
 
 // Event listeners for mousemove, click, and keydown events
 window.addEventListener("mousemove", function(){
-    resetInactiveTimer();
+    startInactiveTimer();
 });
 window.addEventListener("click", function(){
-    resetInactiveTimer();
+    startInactiveTimer();
 });
 window.addEventListener("keydown", function(){
-    resetInactiveTimer();
+    startInactiveTimer();
 });
 
 document.addEventListener('visibilitychange', function() {
     if (document.visibilityState === 'visible') {
-        resetInactiveTimer();
+        startInactiveTimer();
     } else {
         clearTimeout(warningTimer);
         clearTimeout(inactiveTimer);
@@ -69,7 +72,7 @@ chrome.storage.sync.get({
     autoCloseEnabled = items.autoCloseEnabled;
 
     // Initialize inactive timer
-    resetInactiveTimer();
+    startInactiveTimer();
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -115,4 +118,10 @@ document.addEventListener('DOMContentLoaded', function() {
         chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
             chrome.tabs.reload(arrayOfTabs[0].id);
         });    });
+        if(!this.checked){
+            clearTimeout(warningTimer);
+            clearTimeout(inactiveTimer);
+        }else{
+            startInactiveTimer();
+        }
 });
