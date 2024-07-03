@@ -14,11 +14,6 @@ const closeTabs = () => {
 const notifyUser = () => {
     chrome.runtime.sendMessage({ action: "notifyUser" });
 };
-// Function to update and display remaining time
-const updateRemainingTime = (remainingSeconds) => {
-    const timeRemainingElement = document.getElementById('time-remaining-text');
-    timeRemainingElement.textContent = `Time remaining: ${remainingSeconds/1000} seconds`;
-};
 
 // Function to handle activity and notify users
 const startInactiveTimer = () => {
@@ -26,18 +21,12 @@ const startInactiveTimer = () => {
         clearTimeout(warningTimer);
         clearTimeout(inactiveTimer);
         clearInterval(displayTimer);
-
+        this.autoCloseEnabled = chrome.storage.sync.get({ autoCloseEnabled });
         if (document.visibilityState === 'visible' && autoCloseEnabled) {
             let remainingTime = inactiveDuration * 60;
 
             warningTimer = setTimeout(notifyUser, inactiveDuration * 60 - 5000); // Notify 5 seconds before closing
             inactiveTimer = setTimeout(closeTabs, inactiveDuration * 60); // Close tabs after inactiveDuration
-            displayTimer = setInterval(()=> {
-                remainingTime -=1000;
-                if(remainingTime >=0) {
-                    updateRemainingTime(remainingTime);
-                }
-            }, 1000);
         }
     }
     
@@ -114,14 +103,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('autoCloseToggle').addEventListener('change', function() {
         let autoCloseEnabled = this.checked;
         chrome.storage.sync.set({ autoCloseEnabled: autoCloseEnabled });
-        //refresh page
-        chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
-            chrome.tabs.reload(arrayOfTabs[0].id);
-        });    });
-        if(!this.checked){
-            clearTimeout(warningTimer);
-            clearTimeout(inactiveTimer);
-        }else{
-            startInactiveTimer();
-        }
+        //refresh pages
+        chrome.tabs.query({}, function (tabs) {
+            tabs.forEach(tab => {
+                chrome.tabs.reload(tab.id);
+            });
+        });  
+    });
 });
