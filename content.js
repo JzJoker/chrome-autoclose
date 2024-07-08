@@ -1,18 +1,21 @@
 //initialize variables
 let inactiveTimer;
 let warningTimer;
-let displayTimer;
 let inactiveDuration;
 let autoCloseEnabled = true; // Default autoCloseEnabled state
 
 // Function to close all tabs
 const closeTabs = () => {
-    chrome.runtime.sendMessage({ action: "closeTabs" });
+    this.autoCloseEnabled = chrome.storage.sync.get({ autoCloseEnabled });
+    if(autoCloseEnabled)
+        chrome.runtime.sendMessage({ action: "closeTabs" });
 };
 
 // Function to notify user
 const notifyUser = () => {
-    chrome.runtime.sendMessage({ action: "notifyUser" });
+    this.autoCloseEnabled = chrome.storage.sync.get({ autoCloseEnabled });
+    if(autoCloseEnabled)
+        chrome.runtime.sendMessage({ action: "notifyUser" });
 };
 
 // Function to handle activity and notify users
@@ -20,11 +23,8 @@ const startInactiveTimer = () => {
     if(!document.getElementById('popup')){
         clearTimeout(warningTimer);
         clearTimeout(inactiveTimer);
-        clearInterval(displayTimer);
         this.autoCloseEnabled = chrome.storage.sync.get({ autoCloseEnabled });
         if (document.visibilityState === 'visible' && autoCloseEnabled) {
-            let remainingTime = inactiveDuration * 60;
-
             warningTimer = setTimeout(notifyUser, inactiveDuration * 60 - 5000); // Notify 5 seconds before closing
             inactiveTimer = setTimeout(closeTabs, inactiveDuration * 60); // Close tabs after inactiveDuration
         }
