@@ -21,8 +21,10 @@ const notifyUser = () => {
 // Function to handle activity and notify users
 const startInactiveTimer = () => {
     if(!document.getElementById('popup')){
-        clearTimeout(warningTimer);
-        clearTimeout(inactiveTimer);
+        if(warningTimer)
+            clearTimeout(warningTimer);
+        if(inactiveTimer)
+            clearTimeout(inactiveTimer);
         this.autoCloseEnabled = chrome.storage.sync.get({ autoCloseEnabled });
         if (document.visibilityState === 'visible' && autoCloseEnabled) {
             warningTimer = setTimeout(notifyUser, inactiveDuration * 60 - 5000); // Notify 5 seconds before closing
